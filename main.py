@@ -1,4 +1,3 @@
-# Untitled - By: sqgg刘俊麟 - 周一 9月 28 2020
 import sensor, image, time
 import sensor, image, time, math
 from pyb import UART
@@ -7,8 +6,8 @@ import ustruct
 import pyb
 from pyb import Pin
 
-red_threshold=(13, 66, 22, 81, 13, 73)
-area=(0,0,280,160)
+red_threshold=(29, 84, 19, 90, -11, 70)
+area=(0,0,160,120)
 sensor.reset()
 sensor.set_pixformat(sensor.RGB565)
 sensor.set_framesize(sensor.QQVGA)
@@ -61,7 +60,7 @@ def track_maxball(red_threshold,area):
         area=(0,0,160,120)
     return(track)
     print("帧率 : ",clock.fps())
-    
+
 
 def sending_data(cx,cy):
     global uart;
@@ -75,12 +74,12 @@ def sending_data(cx,cy):
                    0x5B)
     uart.write(data);   #必须要传入一个字节数组
 
-    
-    
+
+
 p_out.low()#设置p_out引脚为低
 #mainloop
 while(True):
-    for i in range(10):
+    for i in range(50):
         track=find_maxball(red_threshold,area)
     if track!=None:
         print('找到了最大小球，追踪最大小球')
@@ -102,7 +101,7 @@ while(True):
                 cx=0;cy=0;
 
                 if blobs:
-                max_b = find_max(blobs);
+                    max_b = find_max(blobs);
 
                     for b in blobs:
                         x1=b[0]-4
@@ -117,12 +116,8 @@ while(True):
                         img.draw_rectangle(b[0:4]) # rect
                         cx=max_b[5];
                         cy=max_b[6];
-                        img.draw_line((160,120,cx,cy), color=(127));
-                        #img.draw_string(160,120, "(%d, %d)"%(160,120), color=(127));
-                        img.draw_string(cx, cy, "(%d, %d)"%(cx,cy), color=(127));
 
                     sending_data(cx,cy); #发送点位坐标
-                    recive_data();
 
                 else:
                     print('丢失目标')
