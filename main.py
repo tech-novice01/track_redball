@@ -80,7 +80,6 @@ def sending_data(cx,cy):
 p_out.low()#设置p_out引脚为低
 #mainloop
 while(True):
-    cx=0;cy=0;
     for i in range(10):
         track=find_maxball(red_threshold,area)
     if track!=None:
@@ -100,8 +99,10 @@ while(True):
                 clock.tick() # Track elapsed milliseconds between snapshots().
                 img = sensor.snapshot() # Take a picture and return the image.
                 blobs = img.find_blobs([red_threshold],roi=area)
+                cx=0;cy=0;
 
                 if blobs:
+                max_b = find_max(blobs);
 
                     for b in blobs:
                         x1=b[0]-4
